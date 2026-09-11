@@ -1,11 +1,44 @@
-# MazyOS — Sistema operacional do negócio
+# Quarteto Gileade — MazyOS
 
 Sua empresa roda em cima desse arquivo. Aqui ficam as regras de operação
 do MazyOS — como o Claude lê o contexto, aprende com correções, mantém
 tudo atualizado e cria skills novas conforme a operação evolui.
 
-Esse arquivo é editável. Quando o `/instalar` rodar, ele complementa o
-final dessa página com as regras específicas do seu negócio.
+Esse arquivo é editável.
+
+## O que é esse workspace
+
+Operação do Quarteto Gileade — grupo gospel de 4 integrantes, 38 anos de
+trajetória (fundado em 1987 em Rio Verde-GO). Aqui fica a criação do site,
+conteúdo, identidade visual e comunicação com igrejas, produtores e
+prefeituras que contratam o grupo.
+
+**Estrutura de pastas:**
+- `_memoria/` — quem é o grupo, como fala, o que tá em foco agora
+- `identidade/` — cores, fontes, logo, padrão visual (navy + dourado)
+- `marketing/` — conteúdo, SEO, campanhas (saída das skills)
+- `saidas/` — análises, emails, documentos pontuais
+- `dados/` — arquivos a analisar (CSV, PDF, planilha)
+- `scripts/` — utilitários (gerar imagem, postar, render)
+
+## Quem é
+
+Quarteto Gileade — 38 anos de louvor, adoração e propagação de Cristo.
+4 integrantes, sem equipe de apoio. Atende igrejas, produtores de eventos
+e prefeituras.
+
+## Tom de voz
+
+Ainda não calibrado com exemplo real (ver `_memoria/preferencias.md`).
+Base provisória: narrativo, institucional, respeitoso, valoriza a
+trajetória do grupo.
+
+## Foco atual
+
+Criar site novo em formato landing page (seções, não páginas), com vídeo
+de fundo no hero, logo em destaque, seções de integrantes, história,
+YouTube, Instagram e contato. Referência de estilo: goldcityministries.com.
+Ver `_memoria/estrategia.md`.
 
 ---
 

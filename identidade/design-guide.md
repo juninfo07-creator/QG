@@ -8,15 +8,15 @@
 
 ## Cores
 
-- **Fundo principal:**
+- **Fundo principal:** Azul-marinho quase preto (base da logo)
 
-- **Cor de destaque / CTA:**
+- **Cor de destaque / CTA:** Dourado / mostarda (tom da tipografia da logo)
 
-- **Texto principal:**
+- **Texto principal:** Branco ou dourado claro sobre fundo escuro
 
-- **Fundo alternativo / cards:**
+- **Fundo alternativo / cards:** *(pendente — sugestão: cinza-escuro ou navy mais claro)*
 
-- **Cor proibida:**
+- **Cor proibida:** *(pendente)*
 
 ---
 
@@ -49,10 +49,10 @@
 
 ## Logo
 
-- **Arquivo:** *(ex: identidade/logo.png ou identidade/logo.svg)*
-- **Versão pra fundo escuro:** *(se tiver — ex: identidade/logo-branco.png)*
-- **Onde usar:** slide final do carrossel (CTA), header de propostas, slides de apresentação
-- **Tamanho sugerido:** largura entre 120-200px nos HTMLs
+- **Arquivo:** *(pendente — usuário precisa colocar o arquivo em `identidade/logo.png` ou `.svg`)*. Descrição visual: fundo azul-marinho, "Gileade" em script dourado, "QUARTETO" em caixa alta dourada menor, emblema "25" decorativo.
+- **Versão pra fundo escuro:** já é escura por padrão (funciona nativamente sobre navy/preto)
+- **Onde usar:** hero do site (destaque sobre vídeo de fundo), slide final do carrossel (CTA), header de propostas
+- **Tamanho sugerido:** largura entre 120-200px nos HTMLs; grande e centralizada no hero do site
 
 ---
 
