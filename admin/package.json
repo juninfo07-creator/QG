@@ -1,0 +1,13 @@
+{
+  "name": "quarteto-gileade-admin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Painel administrativo local para editar a agenda do site do Quarteto Gileade",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

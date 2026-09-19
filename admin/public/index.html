@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel — Agenda do Quarteto Gileade</title>
+<style>
+  :root {
+    --navy: #080b14;
+    --navy-2: #111827;
+    --navy-3: #171f33;
+    --gold: #d4af37;
+    --gold-light: #f0d78c;
+    --cream: #f5f2ea;
+    --muted: #a7adbd;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Inter, Arial, sans-serif;
+    background: var(--navy);
+    color: var(--cream);
+    padding: 32px 20px 80px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+  .item {
+    background: var(--navy-2);
+    border: 1px solid var(--navy-3);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .item-row { display: flex; gap: 8px; align-items: center; }
+  label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px; }
+  input[type=text] {
+    width: 100%;
+    background: var(--navy);
+    border: 1px solid var(--navy-3);
+    color: var(--cream);
+    padding: 9px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  input[type=text]:focus { outline: 1px solid var(--gold); }
+  .field { flex: 1; }
+  .field-date { max-width: 130px; }
+  .item-actions { display: flex; gap: 6px; justify-content: flex-end; }
+  button {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    padding: 8px 14px;
+    font-weight: 600;
+  }
+  .btn-remove { background: transparent; color: #e07a7a; border: 1px solid #e07a7a; }
+  .btn-move { background: var(--navy-3); color: var(--cream); padding: 8px 10px; }
+  .btn-add {
+    width: 100%;
+    background: var(--navy-3);
+    color: var(--gold-light);
+    border: 1px dashed var(--gold);
+    padding: 12px;
+    margin-top: 8px;
+    margin-bottom: 28px;
+  }
+  .bar {
+    position: sticky;
+    bottom: 0;
+    background: var(--navy);
+    padding: 16px 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .btn-save {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+  .btn-save:disabled { opacity: 0.5; cursor: default; }
+  #status { font-size: 13px; color: var(--muted); }
+  #status.ok { color: #8fd19e; }
+  #status.err { color: #e07a7a; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Agenda — Quarteto Gileade</h1>
+  <p class="subtitle">Painel local. Editar aqui atualiza a lista de datas que aparece no site. Só funciona neste computador.</p>
+
+  <div id="lista"></div>
+  <button class="btn-add" id="btnAdd">+ Adicionar data</button>
+
+  <div class="bar">
+    <button class="btn-save" id="btnSave">Salvar agenda</button>
+    <span id="status"></span>
+  </div>
+</div>
+
+<script>
+  var lista = document.getElementById('lista');
+  var status = document.getElementById('status');
+  var agenda = [];
+
+  function setStatus(msg, tipo) {
+    status.textContent = msg;
+    status.className = tipo || '';
+  }
+
+  function render() {
+    lista.innerHTML = '';
+    agenda.forEach(function (item, i) {
+      var card = document.createElement('div');
+      card.className = 'item';
+      card.innerHTML =
+        '<div class="item-row">' +
+          '<div class="field field-date"><label>Data</label><input type="text" data-field="data" placeholder="ex: 5-6 SET"></div>' +
+          '<div class="field"><label>Cidade</label><input type="text" data-field="cidade" placeholder="ex: Rio Verde-GO"></div>' +
+        '</div>' +
+        '<div class="field"><label>Local</label><input type="text" data-field="local" placeholder="ex: Igreja Assembleia de Deus"></div>' +
+        '<div class="item-actions">' +
+          '<button class="btn-move" data-acao="subir" title="Mover pra cima">↑</button>' +
+          '<button class="btn-move" data-acao="descer" title="Mover pra baixo">↓</button>' +
+          '<button class="btn-remove" data-acao="remover">Remover</button>' +
+        '</div>';
+
+      card.querySelectorAll('input').forEach(function (input) {
+        input.value = item[input.dataset.field] || '';
+        input.addEventListener('input', function () {
+          agenda[i][input.dataset.field] = input.value;
+        });
+      });
+
+      card.querySelector('[data-acao=remover]').addEventListener('click', function () {
+        agenda.splice(i, 1);
+        render();
+      });
+      card.querySelector('[data-acao=subir]').addEventListener('click', function () {
+        if (i === 0) return;
+        var tmp = agenda[i - 1]; agenda[i - 1] = agenda[i]; agenda[i] = tmp;
+        render();
+      });
+      card.querySelector('[data-acao=descer]').addEventListener('click', function () {
+        if (i === agenda.length - 1) return;
+        var tmp = agenda[i + 1]; agenda[i + 1] = agenda[i]; agenda[i] = tmp;
+        render();
+      });
+
+      lista.appendChild(card);
+    });
+  }
+
+  document.getElementById('btnAdd').addEventListener('click', function () {
+    agenda.push({ data: '', cidade: '', local: '' });
+    render();
+  });
+
+  document.getElementById('btnSave').addEventListener('click', function () {
+    setStatus('Salvando...');
+    fetch('/api/agenda', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(agenda),
+    })
+      .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+      .then(function (r) {
+        if (r.ok) setStatus('Salvo. O site já reflete essa agenda.', 'ok');
+        else setStatus(r.data.erro || 'Erro ao salvar.', 'err');
+      })
+      .catch(function () { setStatus('Erro de conexão com o painel.', 'err'); });
+  });
+
+  fetch('/api/agenda')
+    .then(function (res) { return res.json(); })
+    .then(function (data) { agenda = data; render(); })
+    .catch(function () { setStatus('Não foi possível carregar a agenda atual.', 'err'); });
+</script>
+</body>
+</html>
