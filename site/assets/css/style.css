@@ -407,26 +407,104 @@ img { max-width: 100%; display: block; }
 
 /* INSTAGRAM */
 .instagram-section { background: #000000; color: var(--cream); }
-.instagram-section .section-title { color: var(--cream); }
-.instagram-icon { color: var(--cream); margin: 0 0 16px; }
-.instagram-section p { color: var(--muted); margin-bottom: 28px; }
 
-.instagram-feature {
+.instagram-grid {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 40px;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 56px;
   align-items: center;
-  max-width: 900px;
-  margin: 0 auto;
 }
-.instagram-post { display: flex; justify-content: center; }
-.instagram-post iframe { margin: 0 !important; }
-.instagram-cta { text-align: left; }
+
+/* Photo composition: a tall "performance" shot anchors the block, with a
+   candid landscape shot overlapping its bottom-left corner for depth.
+   Sized with aspect-ratio (not a fixed px height) so the whole block
+   scales predictably at any viewport width, mobile included. */
+.instagram-photos {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 4 / 5;
+}
+.instagram-photo {
+  position: absolute;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+}
+.instagram-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.instagram-photo-main {
+  top: 0;
+  right: 0;
+  width: 70%;
+  aspect-ratio: 3 / 4;
+}
+.instagram-photo-main img { object-position: center 20%; }
+.instagram-photo-accent {
+  left: 0;
+  bottom: 0;
+  width: 56%;
+  aspect-ratio: 4 / 3;
+  z-index: 2;
+}
+
+.instagram-info { text-align: left; }
+.instagram-info-solo {
+  text-align: center;
+  max-width: 560px;
+}
+.instagram-info.instagram-info-solo .eyebrow,
+.instagram-info.instagram-info-solo .section-title {
+  text-align: center;
+}
+.instagram-info-solo .instagram-text {
+  margin-left: auto;
+  margin-right: auto;
+}
+.instagram-info .eyebrow,
+.instagram-info .section-title {
+  text-align: left;
+}
+.instagram-info .section-title { margin-bottom: 20px; }
+.instagram-text {
+  color: var(--muted);
+  max-width: 440px;
+  font-size: 1.05rem;
+  margin: 0 0 22px;
+}
+.instagram-title span { color: var(--gold); }
+.instagram-handle {
+  font-family: var(--font-display);
+  color: var(--gold);
+  font-size: 1.15rem;
+  margin: 0 0 32px;
+}
+.instagram-follow-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
 
 @media (max-width: 860px) {
-  .instagram-feature { grid-template-columns: 1fr; text-align: center; }
-  .instagram-cta { text-align: center; }
-  .instagram-icon { margin: 0 auto 16px; }
+  .instagram-grid { grid-template-columns: 1fr; gap: 40px; }
+  .instagram-photos { margin: 0 auto; }
+  .instagram-info { text-align: center; }
+  .instagram-info .eyebrow,
+  .instagram-info .section-title {
+    text-align: center;
+  }
+  .instagram-text { margin-left: auto; margin-right: auto; }
+}
+
+@media (max-width: 480px) {
+  .instagram-photos { max-width: 300px; }
+  .instagram-photo-main { width: 76%; }
+  .instagram-photo-accent { width: 60%; }
 }
 
 /* CONTATO */
