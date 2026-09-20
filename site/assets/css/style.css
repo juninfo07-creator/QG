@@ -105,6 +105,7 @@ img { max-width: 100%; display: block; }
 .hero {
   position: relative;
   height: 100vh;
+  height: 100dvh;
   min-height: 560px;
   display: flex;
   flex-direction: column;
@@ -125,8 +126,12 @@ img { max-width: 100%; display: block; }
   width: 100vw;
   height: 56.25vw; /* 16:9 */
   min-height: 100vh;
+  min-height: 100dvh;
   min-width: 177.78vh; /* 16:9 */
-  transform: translate(-50%, -50%);
+  min-width: 177.78dvh;
+  /* Zoom extra pra garantir que nenhuma legenda/UI do YouTube fique visível
+     nas bordas, mesmo com a barra do navegador mobile aparecendo/sumindo. */
+  transform: translate(-50%, -50%) scale(1.3);
 }
 .hero-overlay {
   position: absolute;
