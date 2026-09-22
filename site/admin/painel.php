@@ -82,7 +82,9 @@ exigirAdmin();
   .card.dark details { border-top-color: #2c3150; }
   summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--gold); }
 
-  .acoes-evento { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .acoes-evento { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; margin-top: 16px; }
+  .campo-status-inline { width: 160px; }
+  .campo-status-inline label { margin-top: 0; }
   button {
     cursor: pointer; border: none; border-radius: 6px; font-size: 13px; padding: 9px 16px; font-weight: 600;
   }
@@ -252,19 +254,17 @@ function renderEvento(ev, i) {
     '</div>' +
     '<div class="corpo-evento ' + (novo ? 'aberto' : '') + '">' +
       '<div class="grid2">' +
-        campo('Nome do evento', 'nome_evento', 'text', ev.nome_evento) +
-        campo('Status', 'status', 'select', ev.status || 'a_confirmar') +
-      '</div>' +
-      '<div class="grid2">' +
         campo('Data (referência interna)', 'data', 'date', ev.data) +
-        campo('Horário', 'horario', 'time', ev.horario) +
+        campo('Data no site', 'data_site', 'text', ev.data_site || dataParaBR(ev.data), 'placeholder="Ex: 15-16 NOV"') +
       '</div>' +
-      campo('Data no site', 'data_site', 'text', ev.data_site || dataParaBR(ev.data), 'placeholder="Como a data deve aparecer no site (ex: 15-16 NOV)"') +
       '<div class="grid2">' +
         campo('Cidade (aparece no site)', 'cidade', 'text', ev.cidade) +
-        campo('Pastor Presidente', 'pastor_presidente', 'text', ev.pastor_presidente) +
+        campo('Local/Igreja (aparece no site)', 'local', 'text', ev.local) +
       '</div>' +
-      campo('Local (aparece no site)', 'local', 'text', ev.local) +
+      '<div class="grid2">' +
+        campo('Nome do Pastor', 'pastor_presidente', 'text', ev.pastor_presidente) +
+        campo('Nome do evento', 'nome_evento', 'text', ev.nome_evento) +
+      '</div>' +
 
       '<details>' +
         '<summary>Informações para os integrantes</summary>' +
@@ -294,6 +294,7 @@ function renderEvento(ev, i) {
       '</details>' +
 
       '<div class="acoes-evento">' +
+        '<div class="campo-status-inline">' + campo('Status', 'status', 'select', ev.status || 'a_confirmar') + '</div>' +
         '<button class="btn-salvar" data-acao="salvar">Salvar</button>' +
         (novo || ev.status === 'concluido' ? '' : '<button class="btn-concluir" data-acao="concluir">Marcar como Concluído</button>') +
         (novo ? '' : '<button class="btn-excluir" data-acao="excluir">Excluir</button>') +
