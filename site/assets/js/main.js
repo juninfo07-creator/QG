@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
           info.appendChild(span);
           var date = document.createElement('div');
           date.className = 'agenda-date';
-          date.textContent = formatarData(item.data, item.data_fim);
+          date.textContent = item.data_site || formatarData(item.data, item.data_fim);
           var wrap = document.createElement('div');
           wrap.className = 'agenda-item';
           wrap.appendChild(date);

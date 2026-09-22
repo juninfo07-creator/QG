@@ -111,9 +111,7 @@ $usuario = usuarioAtual();
       <input type="date" id="previsaoInicio" style="display:none;">
       <input type="date" id="previsaoFim" style="display:none;">
     </div>
-    <div class="previsao-numeros">
-      <div><label>Cachê Bruto</label><strong id="previsaoBruto" class="valor-bruto">R$ 0,00</strong></div>
-      <div><label>Despesas</label><strong id="previsaoDespesas" class="valor-despesas">R$ 0,00</strong></div>
+    <div class="previsao-numeros" style="grid-template-columns: 1fr;">
       <div><label>Cachê Líquido</label><strong id="previsaoLiquido" class="valor-liquido">R$ 0,00</strong></div>
     </div>
   </div>
@@ -152,12 +150,15 @@ fetch('../api/eventos.php?_=' + Date.now())
 
     var destaque = futuros[0];
     var resto = futuros.slice(1);
+    // "Data" (interna) só serve pra ordenar/filtrar o que é próximo evento —
+    // o que aparece pro integrante é sempre "Data no site" (data_site).
     var pd = partesData(destaque.data);
+    var textoDestaque = (destaque.data_site && destaque.data_site.trim()) ? destaque.data_site : (pd ? pd.dia + ' ' + pd.mes : destaque.data);
 
     var html = '';
     html += '<p class="eyebrow">Próximo evento</p>';
     html += '<div class="destaque">';
-    html += '<div class="data">' + (pd ? pd.dia + ' ' + pd.mes : destaque.data) + '</div>';
+    html += '<div class="data">' + esc(textoDestaque) + '</div>';
     html += '<div class="nome">' + esc(destaque.nome_evento) + '</div>';
     if (destaque.horario) html += '<div class="info">🕒 ' + esc(destaque.horario) + '</div>';
     html += '<div class="info">📍 ' + esc(destaque.local || '') + (destaque.cidade ? ' — ' + esc(destaque.cidade) : '') + '</div>';
@@ -169,8 +170,13 @@ fetch('../api/eventos.php?_=' + Date.now())
       html += '<p class="lista-titulo">Próximos eventos</p>';
       resto.forEach(function (e) {
         var d = partesData(e.data);
+        var textoResto = (e.data_site && e.data_site.trim()) ? e.data_site : null;
         html += '<a class="evento-card" href="evento.php?id=' + e.id + '">';
-        html += '<div class="evento-data"><div class="dia">' + (d ? d.dia : '') + '</div><div class="mes">' + (d ? d.mes : '') + '</div></div>';
+        if (textoResto) {
+          html += '<div class="evento-data"><div class="dia" style="font-size:13px;">' + esc(textoResto) + '</div></div>';
+        } else {
+          html += '<div class="evento-data"><div class="dia">' + (d ? d.dia : '') + '</div><div class="mes">' + (d ? d.mes : '') + '</div></div>';
+        }
         html += '<div class="evento-corpo"><div class="evento-nome">' + esc(e.nome_evento) + '</div><div class="evento-local">' + esc(e.local || '') + (e.cidade ? ' — ' + esc(e.cidade) : '') + '</div></div>';
         html += '<span class="status-badge status-' + e.status + '">' + statusLabel(e.status) + '</span>';
         html += '</a>';
@@ -200,8 +206,6 @@ function carregarPrevisao() {
   fetch(url)
     .then(function (res) { return res.json(); })
     .then(function (r) {
-      document.getElementById('previsaoBruto').textContent = moeda(r.bruto);
-      document.getElementById('previsaoDespesas').textContent = moeda(r.despesas);
       document.getElementById('previsaoLiquido').textContent = moeda(r.liquido);
     });
 }

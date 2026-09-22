@@ -48,7 +48,7 @@ function validarCamposEvento($body) {
   if (isset($body['data_fim']) && !dataValida($body['data_fim'])) {
     return 'Data final inválida. Use o formato AAAA-MM-DD.';
   }
-  foreach (['cache_bruto', 'despesas'] as $campo) {
+  foreach (['cache_bruto', 'despesas', 'cache_liquido'] as $campo) {
     if (isset($body[$campo]) && $body[$campo] !== '' && (float) $body[$campo] < 0) {
       return 'Valores financeiros não podem ser negativos.';
     }
@@ -56,19 +56,11 @@ function validarCamposEvento($body) {
   return null;
 }
 
-$PUBLICOS = ['id', 'nome_evento', 'data', 'data_fim', 'horario', 'local', 'cidade', 'endereco', 'mapa_link', 'status'];
-$BANDA = ['horario_saida_rv', 'horario_chegada', 'horario_som', 'horario_saida', 'transporte', 'hospedagem', 'equipamentos', 'obs_banda'];
-$ADMIN = ['cache_bruto', 'despesas', 'forma_pagamento', 'status_pagamento', 'contratante_nome', 'contratante_telefone', 'contratante_email', 'obs_admin', 'concluido_em', 'ordem', 'criado_em', 'atualizado_em'];
-
-// Cachê Líquido nunca é editável — é sempre calculado a partir do Bruto e das Despesas.
-function comLiquido($row) {
-  if (array_key_exists('cache_bruto', $row)) {
-    $bruto = (float) ($row['cache_bruto'] ?? 0);
-    $despesas = (float) ($row['despesas'] ?? 0);
-    $row['cache_liquido'] = $bruto - $despesas;
-  }
-  return $row;
-}
+$PUBLICOS = ['id', 'nome_evento', 'data', 'data_site', 'data_fim', 'horario', 'local', 'cidade', 'endereco', 'mapa_link', 'status'];
+$BANDA = ['pastor_presidente', 'horario_saida_rv', 'horario_chegada', 'horario_som', 'horario_saida', 'transporte', 'hospedagem', 'equipamentos', 'obs_banda'];
+// Cachê Líquido é preenchido manualmente pelo gestor — não é mais calculado a
+// partir do Bruto e das Despesas (pedido do cliente).
+$ADMIN = ['cache_bruto', 'despesas', 'cache_liquido', 'forma_pagamento', 'status_pagamento', 'contratante_nome', 'contratante_telefone', 'contratante_email', 'obs_admin', 'concluido_em', 'ordem', 'criado_em', 'atualizado_em'];
 
 function camposPermitidos($usuario) {
   global $PUBLICOS, $BANDA, $ADMIN;
@@ -118,7 +110,7 @@ if ($method === 'GET') {
       echo json_encode(['erro' => 'Evento não encontrado.']);
       exit;
     }
-    echo json_encode($ehAdmin ? comLiquido($row) : $row, JSON_UNESCAPED_UNICODE);
+    echo json_encode($row, JSON_UNESCAPED_UNICODE);
     exit;
   }
 
@@ -135,7 +127,6 @@ if ($method === 'GET') {
 
   $stmt = $pdo->query("SELECT $colunas FROM eventos WHERE $where ORDER BY data ASC, id ASC");
   $linhas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-  if ($ehAdmin) $linhas = array_map('comLiquido', $linhas);
   echo json_encode($linhas, JSON_UNESCAPED_UNICODE);
   exit;
 }
@@ -162,7 +153,7 @@ if ($method === 'POST') {
     exit;
   }
 
-  $campos = array_merge(['nome_evento', 'data', 'data_fim', 'horario', 'local', 'cidade', 'endereco', 'mapa_link', 'status'], $GLOBALS['BANDA'], $GLOBALS['ADMIN']);
+  $campos = array_merge(['nome_evento', 'data', 'data_site', 'data_fim', 'horario', 'local', 'cidade', 'endereco', 'mapa_link', 'status'], $GLOBALS['BANDA'], $GLOBALS['ADMIN']);
   $campos = array_diff($campos, ['id', 'criado_em', 'atualizado_em']);
 
   $colunas = [];
@@ -223,17 +214,17 @@ if ($method === 'PUT') {
     exit;
   }
 
-  $todos = array_merge(['nome_evento', 'data', 'data_fim', 'horario', 'local', 'cidade', 'endereco', 'mapa_link', 'status'], $GLOBALS['BANDA'], $GLOBALS['ADMIN']);
+  $todos = array_merge(['nome_evento', 'data', 'data_site', 'data_fim', 'horario', 'local', 'cidade', 'endereco', 'mapa_link', 'status'], $GLOBALS['BANDA'], $GLOBALS['ADMIN']);
   // concluido_em nunca vem do cliente — é definido automaticamente pelo servidor.
   $todos = array_diff($todos, ['id', 'criado_em', 'atualizado_em', 'concluido_em']);
 
   $rotulos = [
-    'nome_evento' => 'Nome do evento', 'data' => 'Data', 'data_fim' => 'Data final',
+    'nome_evento' => 'Nome do evento', 'data' => 'Data', 'data_site' => 'Data no site', 'data_fim' => 'Data final',
     'horario' => 'Horário', 'local' => 'Local', 'cidade' => 'Cidade', 'endereco' => 'Endereço',
-    'mapa_link' => 'Link do mapa', 'status' => 'Status',
+    'mapa_link' => 'Link do mapa', 'status' => 'Status', 'pastor_presidente' => 'Pastor Presidente',
     'horario_saida_rv' => 'Horário de saída RV', 'horario_chegada' => 'Previsão de chegada', 'horario_som' => 'Passagem de som', 'horario_saida' => 'Horário de saída',
     'transporte' => 'Transporte', 'hospedagem' => 'Hospedagem', 'equipamentos' => 'Equipamentos', 'obs_banda' => 'Observações pra banda',
-    'cache_bruto' => 'Cachê Bruto', 'despesas' => 'Despesas', 'forma_pagamento' => 'Forma de pagamento', 'status_pagamento' => 'Status do pagamento',
+    'cache_bruto' => 'Cachê Bruto', 'despesas' => 'Despesas', 'cache_liquido' => 'Cachê Líquido', 'forma_pagamento' => 'Forma de pagamento', 'status_pagamento' => 'Status do pagamento',
     'contratante_nome' => 'Contratante', 'contratante_telefone' => 'Telefone do contratante', 'contratante_email' => 'E-mail do contratante',
     'obs_admin' => 'Observações administrativas',
   ];

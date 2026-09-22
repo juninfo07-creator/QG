@@ -73,12 +73,14 @@ if (!id) {
       var html = '';
       html += '<span class="status-badge status-' + e.status + '">' + statusLabel(e.status) + '</span>';
       html += '<h1>' + esc(e.nome_evento) + '</h1>';
-      html += '<p class="data-linha">' + esc(e.data) + (e.data_fim ? ' a ' + esc(e.data_fim) : '') + (e.horario ? ' · ' + esc(e.horario) : '') + '</p>';
+      var textoData = (e.data_site && e.data_site.trim()) ? e.data_site : (e.data + (e.data_fim ? ' a ' + e.data_fim : ''));
+      html += '<p class="data-linha">' + esc(textoData) + (e.horario ? ' · ' + esc(e.horario) : '') + '</p>';
 
       html += '<div class="bloco"><h2>Local</h2>';
       html += linha('Local', e.local);
       html += linha('Cidade', e.cidade);
       html += linha('Endereço', e.endereco);
+      html += linha('Pastor Presidente', e.pastor_presidente);
       html += '</div>';
       if (e.mapa_link && /^https?:\/\//i.test(e.mapa_link)) {
         html += '<a class="btn-mapa" href="' + escAttr(e.mapa_link) + '" target="_blank" rel="noopener">Abrir no mapa</a>';

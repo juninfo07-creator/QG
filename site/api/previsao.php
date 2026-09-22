@@ -41,7 +41,7 @@ switch ($periodo) {
 // concluído já aconteceu, mas continua contando pro financeiro).
 $pdo = getPDO();
 $stmt = $pdo->prepare(
-  "SELECT cache_bruto, despesas FROM eventos
+  "SELECT cache_bruto, despesas, cache_liquido FROM eventos
    WHERE status IN ('confirmado', 'concluido')
    AND data >= ? AND data <= ?"
 );
@@ -50,17 +50,26 @@ $linhas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $bruto = 0.0;
 $despesas = 0.0;
+$liquido = 0.0;
 foreach ($linhas as $l) {
   $bruto += (float) ($l['cache_bruto'] ?? 0);
   $despesas += (float) ($l['despesas'] ?? 0);
+  $liquido += (float) ($l['cache_liquido'] ?? 0);
 }
 
-echo json_encode([
+$resposta = [
   'periodo' => $periodo,
   'inicio' => $inicio,
   'fim' => $fim,
   'quantidade' => count($linhas),
-  'bruto' => $bruto,
-  'despesas' => $despesas,
-  'liquido' => $bruto - $despesas,
-], JSON_UNESCAPED_UNICODE);
+  'liquido' => $liquido,
+];
+
+// Cachê Bruto e Despesas são informação administrativa — integrantes
+// recebem só o valor líquido.
+if (ehAdmin()) {
+  $resposta['bruto'] = $bruto;
+  $resposta['despesas'] = $despesas;
+}
+
+echo json_encode($resposta, JSON_UNESCAPED_UNICODE);

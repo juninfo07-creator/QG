@@ -226,6 +226,26 @@ function getPDO() {
       ? 'ALTER TABLE eventos ADD COLUMN horario_saida_rv TEXT'
       : 'ALTER TABLE eventos ADD COLUMN horario_saida_rv VARCHAR(20) NULL');
   }
+  // "Data" segue sendo a data real (organização interna, ordenação,
+  // previsão financeira). "Data no site" é texto livre, digitado pelo
+  // gestor, e é o que aparece na agenda pública.
+  if (!columnExists($pdo, $driver, 'eventos', 'data_site')) {
+    $pdo->exec($driver === 'sqlite'
+      ? 'ALTER TABLE eventos ADD COLUMN data_site TEXT'
+      : 'ALTER TABLE eventos ADD COLUMN data_site VARCHAR(100) NULL');
+  }
+  if (!columnExists($pdo, $driver, 'eventos', 'pastor_presidente')) {
+    $pdo->exec($driver === 'sqlite'
+      ? 'ALTER TABLE eventos ADD COLUMN pastor_presidente TEXT'
+      : 'ALTER TABLE eventos ADD COLUMN pastor_presidente VARCHAR(150) NULL');
+  }
+  // Cachê Líquido: o cliente pediu pra preencher manualmente (não calcular
+  // automaticamente Bruto - Despesas), então vira uma coluna própria.
+  if (!columnExists($pdo, $driver, 'eventos', 'cache_liquido')) {
+    $pdo->exec($driver === 'sqlite'
+      ? 'ALTER TABLE eventos ADD COLUMN cache_liquido TEXT'
+      : 'ALTER TABLE eventos ADD COLUMN cache_liquido DECIMAL(10,2) NULL');
+  }
 
   return $pdo;
 }

@@ -96,10 +96,6 @@ exigirAdmin();
   }
   .btn-concluir { background: transparent; color: #1c7a3c; border: 1px solid #1c7a3c; }
 
-  .liquido-box { background: var(--bg); border-radius: 6px; padding: 9px 10px; margin-top: 10px; font-size: 14px; }
-  .liquido-box label { margin: 0 0 2px; }
-  .card.dark .liquido-box { background: #0f1220; }
-
   .valor-bruto { color: #1f6fb2; }
   .valor-despesas { color: #9c2b2b; }
   .valor-liquido { color: #1c7a3c; }
@@ -231,6 +227,12 @@ function formatarDataCurta(d) {
   return partes[2] + '/' + partes[1];
 }
 
+function dataParaBR(iso) {
+  if (!iso) return '';
+  var p = iso.split('-');
+  return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso;
+}
+
 function renderEvento(ev, i) {
   var card = document.createElement('div');
   card.className = 'card ' + (i % 2 === 0 ? 'dark' : '');
@@ -250,12 +252,13 @@ function renderEvento(ev, i) {
         campo('Status', 'status', 'select', ev.status || 'a_confirmar') +
       '</div>' +
       '<div class="grid2">' +
-        campo('Data', 'data', 'date', ev.data) +
-        campo('Data final (se houver)', 'data_fim', 'date', ev.data_fim) +
-      '</div>' +
-      '<div class="grid2">' +
+        campo('Data (referência interna)', 'data', 'date', ev.data) +
         campo('Horário', 'horario', 'time', ev.horario) +
+      '</div>' +
+      campo('Data no site', 'data_site', 'text', ev.data_site || dataParaBR(ev.data), 'placeholder="Como a data deve aparecer no site (ex: 15-16 NOV)"') +
+      '<div class="grid2">' +
         campo('Cidade', 'cidade', 'text', ev.cidade) +
+        campo('Pastor Presidente', 'pastor_presidente', 'text', ev.pastor_presidente) +
       '</div>' +
       campo('Local', 'local', 'text', ev.local) +
 
@@ -276,7 +279,7 @@ function renderEvento(ev, i) {
           campo('Cachê Bruto (R$)', 'cache_bruto', 'number', ev.cache_bruto, 'step="0.01" min="0"') +
           campo('Despesas (R$)', 'despesas', 'number', ev.despesas, 'step="0.01" min="0"') +
         '</div>' +
-        '<div class="liquido-box"><label>Cachê Líquido (calculado)</label><strong data-liquido class="valor-liquido">' + moeda((ev.cache_bruto || 0) - (ev.despesas || 0)) + '</strong></div>' +
+        campo('Cachê Líquido (R$)', 'cache_liquido', 'number', ev.cache_liquido, 'step="0.01" min="0"') +
         campo('Status do pagamento', 'status_pagamento', 'select', ev.status_pagamento || 'pendente') +
         campo('Nome do contratante', 'contratante_nome', 'text', ev.contratante_nome) +
         '<div class="grid2">' +
@@ -310,15 +313,6 @@ function renderEvento(ev, i) {
       selPag.appendChild(o);
     });
   }
-
-  var inputBruto = card.querySelector('[data-campo=cache_bruto]');
-  var inputDespesas = card.querySelector('[data-campo=despesas]');
-  var liquidoEl = card.querySelector('[data-liquido]');
-  function recalcularLiquido() {
-    liquidoEl.textContent = moeda((parseFloat(inputBruto.value) || 0) - (parseFloat(inputDespesas.value) || 0));
-  }
-  inputBruto.addEventListener('input', recalcularLiquido);
-  inputDespesas.addEventListener('input', recalcularLiquido);
 
   card.querySelector('[data-acao=toggle]').addEventListener('click', function () {
     card.querySelector('.corpo-evento').classList.toggle('aberto');
