@@ -200,13 +200,16 @@ function campo(label, name, tipo, valor, extra) {
   tipo = tipo || 'text';
   valor = valor == null ? '' : valor;
   extra = extra || '';
+  // Sempre envolve label+campo num único elemento — assim, dentro de um
+  // grid (2 ou 3 colunas), cada campo ocupa uma célula inteira em vez de
+  // o label e o input caírem em células/linhas separadas.
   if (tipo === 'textarea') {
-    return '<label>' + label + '</label><textarea data-campo="' + name + '" ' + extra + '>' + esc(valor) + '</textarea>';
+    return '<div class="campo-wrap"><label>' + label + '</label><textarea data-campo="' + name + '" ' + extra + '>' + esc(valor) + '</textarea></div>';
   }
   if (tipo === 'select') {
-    return '<label>' + label + '</label><select data-campo="' + name + '" ' + extra + '></select>';
+    return '<div class="campo-wrap"><label>' + label + '</label><select data-campo="' + name + '" ' + extra + '></select></div>';
   }
-  return '<label>' + label + '</label><input type="' + tipo + '" data-campo="' + name + '" value="' + escAttr(valor) + '" ' + extra + '>';
+  return '<div class="campo-wrap"><label>' + label + '</label><input type="' + tipo + '" data-campo="' + name + '" value="' + escAttr(valor) + '" ' + extra + '></div>';
 }
 
 function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
