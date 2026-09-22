@@ -76,6 +76,7 @@ exigirAdmin();
   }
   textarea { resize: vertical; min-height: 60px; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0 10px; }
 
   details { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 10px; }
   .card.dark details { border-top-color: #2c3150; }
@@ -257,10 +258,10 @@ function renderEvento(ev, i) {
       '</div>' +
       campo('Data no site', 'data_site', 'text', ev.data_site || dataParaBR(ev.data), 'placeholder="Como a data deve aparecer no site (ex: 15-16 NOV)"') +
       '<div class="grid2">' +
-        campo('Cidade', 'cidade', 'text', ev.cidade) +
+        campo('Cidade (aparece no site)', 'cidade', 'text', ev.cidade) +
         campo('Pastor Presidente', 'pastor_presidente', 'text', ev.pastor_presidente) +
       '</div>' +
-      campo('Local', 'local', 'text', ev.local) +
+      campo('Local (aparece no site)', 'local', 'text', ev.local) +
 
       '<details>' +
         '<summary>Informações para os integrantes</summary>' +
@@ -275,11 +276,11 @@ function renderEvento(ev, i) {
 
       '<details>' +
         '<summary>Informações administrativas (só o gestor vê)</summary>' +
-        '<div class="grid2">' +
+        '<div class="grid3">' +
           campo('Cachê Bruto (R$)', 'cache_bruto', 'number', ev.cache_bruto, 'step="0.01" min="0"') +
           campo('Despesas (R$)', 'despesas', 'number', ev.despesas, 'step="0.01" min="0"') +
+          campo('Cachê Líquido (R$)', 'cache_liquido', 'number', ev.cache_liquido, 'step="0.01" min="0"') +
         '</div>' +
-        campo('Cachê Líquido (R$)', 'cache_liquido', 'number', ev.cache_liquido, 'step="0.01" min="0"') +
         campo('Status do pagamento', 'status_pagamento', 'select', ev.status_pagamento || 'pendente') +
         campo('Nome do contratante', 'contratante_nome', 'text', ev.contratante_nome) +
         '<div class="grid2">' +

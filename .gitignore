@@ -30,3 +30,6 @@ site/admin/config.php
 site/admin/config.production.php
 site/data/agenda.sqlite
 site/admin/mail_outbox.log
+
+# Credenciais de FTP/SFTP pra publicar na HostGator (nunca commitar)
+deploy/ftp-config.php
