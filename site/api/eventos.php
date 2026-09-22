@@ -225,7 +225,7 @@ if ($method === 'PUT') {
     'horario_saida_rv' => 'Horário de saída RV', 'horario_chegada' => 'Previsão de chegada', 'horario_som' => 'Passagem de som', 'horario_saida' => 'Horário de saída',
     'transporte' => 'Transporte', 'hospedagem' => 'Hospedagem', 'equipamentos' => 'Equipamentos', 'obs_banda' => 'Observações pra banda',
     'cache_bruto' => 'Cachê Bruto', 'despesas' => 'Despesas', 'cache_liquido' => 'Cachê Líquido', 'forma_pagamento' => 'Forma de pagamento', 'status_pagamento' => 'Status do pagamento',
-    'contratante_nome' => 'Contratante', 'contratante_telefone' => 'Telefone do contratante', 'contratante_email' => 'E-mail do contratante',
+    'contratante_nome' => 'Contato', 'contratante_telefone' => 'Telefone do contato', 'contratante_email' => 'E-mail do contato',
     'obs_admin' => 'Observações administrativas',
   ];
 

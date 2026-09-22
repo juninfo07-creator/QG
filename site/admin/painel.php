@@ -285,10 +285,10 @@ function renderEvento(ev, i) {
           campo('Cachê Líquido (R$)', 'cache_liquido', 'number', ev.cache_liquido, 'step="0.01" min="0"') +
         '</div>' +
         campo('Status do pagamento', 'status_pagamento', 'select', ev.status_pagamento || 'pendente') +
-        campo('Nome do contratante', 'contratante_nome', 'text', ev.contratante_nome) +
+        campo('Nome do contato', 'contratante_nome', 'text', ev.contratante_nome) +
         '<div class="grid2">' +
-          campo('Telefone do contratante', 'contratante_telefone', 'tel', ev.contratante_telefone) +
-          campo('E-mail do contratante', 'contratante_email', 'email', ev.contratante_email) +
+          campo('Telefone do contato', 'contratante_telefone', 'tel', ev.contratante_telefone) +
+          campo('E-mail do contato', 'contratante_email', 'email', ev.contratante_email) +
         '</div>' +
         campo('Observações administrativas', 'obs_admin', 'textarea', ev.obs_admin) +
       '</details>' +
